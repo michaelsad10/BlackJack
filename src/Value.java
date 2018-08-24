@@ -9,4 +9,11 @@ public enum Value {
     public int getNumVal(){
         return numVal;
     }
+
+    public int getAceValue(boolean isEleven){
+        if (isEleven){
+            return 11;
+        }
+        return 1;
+    }
 }

@@ -48,5 +48,51 @@ public class Deck {
         this.cards = tempDeck;
     }
 
+    public void removeCard(int i){
+        this.cards.remove(i);
+    }
+    public Card getCard(int i){
+        return this.cards.get(i);
+    }
+    public void addCard(Card addCard){
+        this.cards.add(addCard);
+    }
+
+    // Draws from the deck
+    public void draw(Deck comingFrom){
+        this.cards.add(comingFrom.getCard(0));
+        comingFrom.removeCard(0);
+    }
+    public int getCardValue(){
+        int totalValue = 0;
+        Card card;
+        Value value;
+        for (int i=0; i<this.cards.size(); i++){
+            card = this.cards.get(i); // This grabs 1 card from the array list at that index
+            value = card.getValue(); // Since card has value and suit we need the value
+            totalValue += value.getNumVal(); // we use that constructor from the enum class to get the actual number value
+        }
+        return totalValue;
+    }
+    public int getCount(){
+        int count = 0;
+        Card card;
+        Value value;
+        for (int i=0; i<this.cards.size(); i++){
+            card = this.cards.get(i);
+            value = card.getValue();
+            if(value.getNumVal() >= 2 && value.getNumVal() <= 6){
+                count++;
+            }
+            else if(value.getNumVal() >= 10){
+                count--;
+            }
+            else{
+                count = 0;
+            }
+        }
+        return count;
+    }
+
 
 }
