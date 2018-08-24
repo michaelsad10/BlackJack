@@ -39,6 +39,7 @@ public class Blackjack {
             System.out.println("Dealer value: " + dealerCardValue);
 
             boolean keepGoing = true;
+            boolean playerDouble = false;
             while(keepGoing){ // This is the loop for the player if he hits/doubles/stays
                 int move = 0;
                 System.out.println("Hit 1, Double 2, Stay 3");
@@ -53,7 +54,6 @@ public class Blackjack {
                             playerCardValue = player.getCardValue();
                             System.out.println("Hand value: " + playerCardValue);
                             if(playerCardValue>21){
-                                System.out.println("Bust... you lose...");
                                 keepGoing = false;
                                 break;
                             }
@@ -63,14 +63,12 @@ public class Blackjack {
                             playerHand = player.toString();
                             System.out.println(playerHand);
                             System.out.println("Hand value: " + playerCardValue);
-                            playerMoney-= playerBet;
-                            playerBet*=2;
+                            playerDouble = true;
                             if(playerCardValue>21){
-                                System.out.println("Bust... you lose...");
                                 keepGoing = false;
                                 break;
                             }
-                            move=3;
+                            keepGoing = false;
                             break;
                     case 3: keepGoing = false;
                             break;
@@ -80,7 +78,10 @@ public class Blackjack {
             boolean dealerKeepGoing = true;
             boolean dealerBust = false;
             while(dealerKeepGoing){
-                if(dealerCardValue<17){
+                if(playerCardValue>21){
+                    dealerKeepGoing = false;
+                }
+                else if(dealerCardValue<17){
                     // we keep hitting until it bust or hits 17
                     dealer.draw(playingDeck);
                     dealerCardValue = dealer.getCardValue();
@@ -104,6 +105,9 @@ public class Blackjack {
                 System.out.println("Push...");
             }
             else{
+                if(playerDouble){
+                    System.out.println()
+                }
                 System.out.println("You won $ " + playerBet);
                 playerMoney+= playerBet;
             }
