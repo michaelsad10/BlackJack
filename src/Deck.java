@@ -1,49 +1,52 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+//Make deck
+//Shuffle
+//Draw
+//Deck Count
+//Get card
+//
+
 public class Deck {
+    private ArrayList<Card> cards = new ArrayList<Card>();
 
-
-    // instance vars
-    private ArrayList<Card> cards;
-
-    //construct
     public Deck(){
         this.cards = new ArrayList<Card>();
     }
 
-    public void createFullDeck(){
-        // Generate cards
-        for(Suit cardSuit : Suit.values()){
-            for(Value cardValue: Value.values()){
-                this.cards.add(new Card(cardSuit, cardValue));
-
+    public void createDeck(){
+        for(Value value : Value.values()){
+            for(Suit suit : Suit.values()){
+                this.cards.add(new Card(suit,value)); // Adds to the cards array list
             }
         }
     }
 
+    public String toString(){
+        int i=1;
+        String cardList = "";
+        for(Card aCard : this.cards){
+            cardList += "\n" + i + "-" + aCard.toString();
+            i++;
+        }
+        return cardList;
+    }
+
     public void shuffle(){
         ArrayList<Card> tempDeck = new ArrayList<Card>();
+        int index = 0;
         Random random = new Random();
-        int randomCardIndex = 0;
         int originalSize = this.cards.size();
         for(int i=0; i<originalSize; i++){
-            //Generate random index rand.nextInt((max-min) + 1 + min;
-            randomCardIndex = random.nextInt((this.cards.size()-1 - 0)+1)+0;
-            tempDeck.add(this.cards.get(randomCardIndex));
-            //remove from original deck
-            this.cards.remove(randomCardIndex);
+            //int randomNum = rand.nextInt((max - min) + 1) + min; got this from stack overflow
+            index = random.nextInt(((this.cards.size()-1) - 0) + 1) + 0;
+            tempDeck.add(this.cards.get(index));
+            // remove card from og deck
+            this.cards.remove(index);
         }
         this.cards = tempDeck;
     }
 
-    public String toString(){
-        String cardListOutput = "";
-        int i = 0;
-        for(Card aCard : this.cards){
-            cardListOutput += "\n" + i + "-" + aCard.toString();
-            i++;
-        }
-        return cardListOutput;
-    }
+
 }

@@ -1,14 +1,13 @@
+import java.util.ArrayList;
+
 public class Blackjack {
-
     public static void main(String[] args){
-        //Welcome Message
-        System.out.println("Welcome to Blackjack!");
-        String deck;
+        ArrayList<Card> dealer = new ArrayList<Card>();
+        ArrayList<Card> player = new ArrayList<Card>();
         Deck playingDeck = new Deck();
-        playingDeck.createFullDeck();
+        playingDeck.createDeck();
         playingDeck.shuffle();
-        deck = playingDeck.toString();
-        System.out.println(deck);
-
+        String deckOutput = playingDeck.toString();
+        System.out.println(deckOutput);
     }
 }

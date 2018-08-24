@@ -1,14 +1,15 @@
 public class Card {
-    private Value value;
     private Suit suit;
+    private Value value;
 
+    //Need to initialize the card
     public Card(Suit suit, Value value){
-        this.value = value;
         this.suit = suit;
+        this.value = value;
     }
 
     public String toString(){
-        return this.suit.toString() + "-" + this.value.toString();
+        return this.value + "-" + this.suit;
     }
 
     public Value getValue(){
