@@ -94,5 +94,10 @@ public class Deck {
         return count;
     }
 
+    public int getSize(){
+        int size = 0;
+        return size = this.cards.size();
+    }
+
 
 }

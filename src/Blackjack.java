@@ -37,31 +37,83 @@ public class Blackjack {
             System.out.println("Hand value: " + playerCardValue);
             dealerCardValue = dealer.getCardValue();
             System.out.println("Dealer value: " + dealerCardValue);
-            System.out.println("Hit 1, Double 2, Stay 3");
-            int move = userInput.nextInt();
-            while(move!=3 && playerCardValue<21){
+
+            boolean keepGoing = true;
+            while(keepGoing){ // This is the loop for the player if he hits/doubles/stays
+                int move = 0;
+                System.out.println("Hit 1, Double 2, Stay 3");
+                if(move==3){
+                    break;
+                }
+                move = userInput.nextInt();
                 switch(move){
                     case 1: player.draw(playingDeck);
                             playerHand = player.toString();
                             System.out.println(playerHand);
                             playerCardValue = player.getCardValue();
+                            System.out.println("Hand value: " + playerCardValue);
                             if(playerCardValue>21){
                                 System.out.println("Bust... you lose...");
+                                keepGoing = false;
                                 break;
                             }
                             break;
                     case 2: player.draw(playingDeck);
                             playerCardValue = player.getCardValue();
+                            playerHand = player.toString();
+                            System.out.println(playerHand);
+                            System.out.println("Hand value: " + playerCardValue);
                             playerMoney-= playerBet;
                             playerBet*=2;
                             if(playerCardValue>21){
                                 System.out.println("Bust... you lose...");
+                                keepGoing = false;
                                 break;
                             }
+                            move=3;
                             break;
+                    case 3: keepGoing = false;
+                            break;
+                        // Still need code for ace/soft cards
+                }
+            }
+            boolean dealerKeepGoing = true;
+            boolean dealerBust = false;
+            while(dealerKeepGoing){
+                if(dealerCardValue<17){
+                    // we keep hitting until it bust or hits 17
+                    dealer.draw(playingDeck);
+                    dealerCardValue = dealer.getCardValue();
+                }
+                else if(dealerCardValue>=17 && dealerCardValue<=21){
+                    System.out.println("Dealer value: " + dealerCardValue);
+                    dealerKeepGoing = false;
+                }
+                else{
+                    System.out.println("Dealer bust... you win...");
+                    dealerBust = true;
+                    dealerKeepGoing = false;
                 }
             }
 
+            if(!dealerBust && dealerCardValue>playerCardValue){
+                System.out.println("You lost...");
+                playerMoney-=playerBet;
+            }
+            else if(dealerCardValue == playerCardValue){
+                System.out.println("Push...");
+            }
+            else{
+                System.out.println("You won $ " + playerBet);
+                playerMoney+= playerBet;
+            }
+
+            for(int i=0; i<player.getSize(); i++){
+                player.removeCard(i);
+            }
+            for(int x=0; x<dealer.getSize(); x++){
+                dealer.removeCard(x);
+            }
 
 
         }
