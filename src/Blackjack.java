@@ -40,6 +40,7 @@ public class Blackjack {
 
             boolean keepGoing = true;
             boolean playerDouble = false;
+            boolean playerBust = false;
             while(keepGoing){ // This is the loop for the player if he hits/doubles/stays
                 int move = 0;
                 System.out.println("Hit 1, Double 2, Stay 3");
@@ -54,6 +55,7 @@ public class Blackjack {
                             playerCardValue = player.getCardValue();
                             System.out.println("Hand value: " + playerCardValue);
                             if(playerCardValue>21){
+                                playerBust = true;
                                 keepGoing = false;
                                 break;
                             }
@@ -65,6 +67,7 @@ public class Blackjack {
                             System.out.println("Hand value: " + playerCardValue);
                             playerDouble = true;
                             if(playerCardValue>21){
+                                playerBust = true;
                                 keepGoing = false;
                                 break;
                             }
@@ -78,8 +81,9 @@ public class Blackjack {
             boolean dealerKeepGoing = true;
             boolean dealerBust = false;
             while(dealerKeepGoing){
-                if(playerCardValue>21){
+                if(playerCardValue>21){ // This is so that we don't go through this while loop
                     dealerKeepGoing = false;
+                    dealerBust = true;
                 }
                 else if(dealerCardValue<17){
                     // we keep hitting until it bust or hits 17
@@ -97,7 +101,7 @@ public class Blackjack {
                 }
             }
 
-            if(!dealerBust && dealerCardValue>playerCardValue){
+            if((!dealerBust && dealerCardValue>playerCardValue)||playerBust==true){
                 System.out.println("You lost...");
                 playerMoney-=playerBet;
             }
@@ -106,7 +110,7 @@ public class Blackjack {
             }
             else{
                 if(playerDouble){
-                    System.out.println()
+                    System.out.println();
                 }
                 System.out.println("You won $ " + playerBet);
                 playerMoney+= playerBet;
