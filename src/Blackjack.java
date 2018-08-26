@@ -4,12 +4,16 @@ import java.util.Scanner;
 
 public class Blackjack {
     public static void main(String[] args){
+        boolean insurance = false;
         Deck playingDeck = new Deck();
         Deck player = new Deck();
         Deck dealer = new Deck();
+        Play playGame = new Play();
         Scanner userInput = new Scanner(System.in);
         String playerHand, dealerHand;
+        char yn;
         double playerMoney = 1000.00;
+        double insuranceBet = 0;
         playingDeck.createDeck(); // Makes deck
         playingDeck.shuffle(); //Shuffles deck
         while(playerMoney > 0){
@@ -20,7 +24,8 @@ public class Blackjack {
                 break;
             }
             System.out.println("You bet $" + playerBet);
-            System.out.println("Good luck... dealing the cards");
+            System.out.println("Good luck... dealing cards");
+            playerMoney-=playerBet;
             int playerCardValue = 0;
             int dealerCardValue = 0;
             int count = 0;
@@ -37,6 +42,23 @@ public class Blackjack {
             System.out.println("Hand value: " + playerCardValue);
             dealerCardValue = dealer.getCardValue();
             System.out.println("Dealer value: " + dealerCardValue);
+            insurance = dealer.checkAce();
+            if(insurance) {
+                System.out.println("Dealer is showing Ace would you like to buy insurance (y/n)");
+                yn = userInput.next().charAt(0);
+                if (yn == 'y') {
+                    insuranceBet = playerBet / 2;
+                    playerMoney -= insuranceBet;
+                    if (dealerCardValue == 21) {
+                        playerMoney = playerMoney + (insuranceBet * 2);
+                        System.out.println("Dealer had 21...");
+                        break;
+                    } else {
+                        System.out.println("Dealer did not have 21....");
+                    }
+                }
+            }
+
 
             boolean keepGoing = true;
             boolean playerDouble = false;
@@ -44,10 +66,13 @@ public class Blackjack {
             while(keepGoing){ // This is the loop for the player if he hits/doubles/stays
                 int move = 0;
                 System.out.println("Hit 1, Double 2, Stay 3");
-                if(move==3){
-                    break;
-                }
                 move = userInput.nextInt();
+                if(move==2){
+                    if(playerBet > playerMoney){
+                        System.out.println("You cannot double here is a hit");
+                        move = 1;
+                    }
+                }
                 switch(move){
                     case 1: player.draw(playingDeck);
                             playerHand = player.toString();
@@ -100,13 +125,14 @@ public class Blackjack {
                     dealerKeepGoing = false;
                 }
             }
-
-            if((!dealerBust && dealerCardValue>playerCardValue)||playerBust==true){
+            // After everyone has made there move we decide on a winner
+            if((!dealerBust && dealerCardValue>playerCardValue)||playerBust){
                 System.out.println("You lost...");
                 playerMoney-=playerBet;
             }
             else if(dealerCardValue == playerCardValue){
                 System.out.println("Push...");
+                playerMoney+=playerBet;
             }
             else{
                 if(playerDouble){
@@ -115,19 +141,16 @@ public class Blackjack {
                 System.out.println("You won $ " + playerBet);
                 playerMoney+= playerBet;
             }
-
-            for(int i=0; i<player.getSize(); i++){
-                player.removeCard(i);
-            }
-            for(int x=0; x<dealer.getSize(); x++){
-                dealer.removeCard(x);
-            }
+            // Reset the hands back to having no cards
+            player.clearHand();
+            dealer.clearHand();
 
 
         }
 
 
     }
+
 }
 
 //mainDeck = playingDeck.toString();

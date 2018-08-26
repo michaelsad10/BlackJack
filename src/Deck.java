@@ -88,16 +88,32 @@ public class Deck {
                 count--;
             }
             else{
-                count = 0;
+                count += 0;
             }
         }
         return count;
     }
-
-    public int getSize(){
-        int size = 0;
-        return size = this.cards.size();
+    public void clearHand(){
+        cards.clear();
     }
+
+    public boolean checkAce(){
+        Card card;
+        Value value;
+        int rank = 0;
+        card = cards.get(0);
+        value = card.getValue();
+        rank = value.getNumVal();
+        if(rank == 1){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+
+
 
 
 }
