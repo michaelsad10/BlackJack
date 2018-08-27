@@ -32,6 +32,13 @@ public class Deck {
         }
         return cardList;
     }
+    public String firstCard(){
+        int i=1;
+        String cardList = "";
+        Card aCard;
+        cardList += "\n" + i + "-" + this.cards.get(0).toString();
+        return cardList;
+    }
 
     public void shuffle(){
         ArrayList<Card> tempDeck = new ArrayList<Card>();
