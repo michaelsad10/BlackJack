@@ -1,7 +1,6 @@
 import java.util.Scanner;
 
 public class Game {
-    Game game = new Game();
     private Deck playingDeck = new Deck();
     private Deck player = new Deck();
     private Deck dealer = new Deck();
@@ -20,19 +19,25 @@ public class Game {
     boolean dealerKeepGoing = true;
     boolean dealerBust = false;
 
+    public Game(){
+        this.game = game;
+    }
 
     public void Run(){
+        System.out.println("1");
         playingDeck.createDeck();
+        System.out.println("1");
         playingDeck.shuffle();
+        System.out.println("1");
         while(playerMoney > 0) {
-            game.dealingCards();
-            game.showHand();
-            game.betting();
+            this.game.dealingCards();
+            this.game.showHand();
+            this.game.betting();
             dealerHas21 = checkHandforAce();
             while(!dealerHas21){
-                game.calls();
-                game.dealerMoves();
-                game.findWinner();
+                this.game.calls();
+                this.game.dealerMoves();
+                this.game.findWinner();
             }
 
         }
