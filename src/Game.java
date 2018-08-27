@@ -12,6 +12,13 @@ public class Game {
     private double insuranceBet = 0;
     double playerCardValue = 0;
     double dealerCardValue = 0;
+    double playerBet = 0;
+    boolean dealerHas21 = false;
+    boolean keepGoing = true;
+    boolean playerDouble = false;
+    boolean playerBust = false;
+    boolean dealerKeepGoing = true;
+    boolean dealerBust = false;
 
 
     public void Run(){
@@ -19,7 +26,15 @@ public class Game {
         playingDeck.shuffle();
         while(playerMoney > 0) {
             game.dealingCards();
+            game.showHand();
             game.betting();
+            dealerHas21 = checkHandforAce();
+            while(!dealerHas21){
+                game.calls();
+                game.dealerMoves();
+                game.findWinner();
+            }
+
         }
     }
 
@@ -33,7 +48,7 @@ public class Game {
             boolean bettingAmt = true;
             while(bettingAmt){
             System.out.println("You have $" + playerMoney + " how much would you like to bet?");
-            double playerBet = userInput.nextDouble();
+            playerBet = userInput.nextDouble();
             if (playerBet > playerMoney) {
                 System.out.println("You don't have that kind of money pal");
                 bettingAmt = true;
@@ -62,11 +77,10 @@ public class Game {
     //How to hide dealer second card.
     //How to hide dealer second card value.
 
-    public void checkHand(){
-
-        }
+    public boolean checkHandforAce() {
+        boolean insurance = false;
         insurance = dealer.checkAce();
-        if(insurance) {
+        if (insurance) {
             System.out.println("Dealer is showing Ace would you like to buy insurance (y/n)");
             yn = userInput.next().charAt(0);
             if (yn == 'y') {
@@ -74,18 +88,24 @@ public class Game {
                 playerMoney -= insuranceBet;
                 if (dealerCardValue == 21) {
                     playerMoney = playerMoney + (insuranceBet * 2);
-                    System.out.println("Dealer had 21...");
-                    break;
+                    System.out.println("Dealer had 21... ");
+                    return true;
+                }
+            } else {
+                if (dealerCardValue == 21) {
+                    System.out.println("Dealer had 21... you lose...");
+                    return true;
                 } else {
-                    System.out.println("Dealer did not have 21....");
+                    System.out.println("Dealer didn't have 21... keep playing...");
+                    return false;
                 }
             }
+
         }
+        return false;
+    }
 
-
-        boolean keepGoing = true;
-        boolean playerDouble = false;
-        boolean playerBust = false;
+    public void calls() {
         while(keepGoing){ // This is the loop for the player if he hits/doubles/stays
             int move = 0;
             System.out.println("Hit 1, Double 2, Stay 3");
@@ -126,8 +146,10 @@ public class Game {
                 // Still need code for ace/soft cards
             }
         }
-        boolean dealerKeepGoing = true;
-        boolean dealerBust = false;
+
+    }
+
+    public void dealerMoves() {
         while(dealerKeepGoing){
             if(playerCardValue>21){ // This is so that we don't go through this while loop
                 dealerKeepGoing = false;
@@ -148,6 +170,9 @@ public class Game {
                 dealerKeepGoing = false;
             }
         }
+    }
+
+    public void findWinner() {
         // After everyone has made there move we decide on a winner
         if((!dealerBust && dealerCardValue>playerCardValue)||playerBust){
             System.out.println("You lost...");
@@ -167,10 +192,13 @@ public class Game {
         // Reset the hands back to having no cards
         player.clearHand();
         dealer.clearHand();
-
-
     }
 
 
+
+
 }
+
+
+
 

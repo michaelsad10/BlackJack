@@ -4,8 +4,7 @@ import java.util.Scanner;
 
 public class Blackjack {
     public static void main(String[] args) {
-        Game game;
-        //game.Run();
-        //return 0;
+        Game game = new Game();
+        game.Run();
     }
 }
