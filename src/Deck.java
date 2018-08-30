@@ -32,7 +32,7 @@ public class Deck {
         }
         return cardList;
     }
-    public String firstCard(){
+    public String firstCard(){ //This gets me the dealers first card
         int i=1;
         String cardList = "";
         Card aCard;
@@ -58,6 +58,7 @@ public class Deck {
     public void removeCard(int i){
         this.cards.remove(i);
     }
+
     public Card getCard(int i){
         return this.cards.get(i);
     }

@@ -5,39 +5,34 @@ public class Game {
     private Deck player = new Deck();
     private Deck dealer = new Deck();
     private Scanner userInput = new Scanner(System.in);
-    String playerHand, dealerHand;
+    private String playerHand, dealerHand;
     char yn;
     private double playerMoney = 1000.00;
     private double insuranceBet = 0;
-    double playerCardValue = 0;
-    double dealerCardValue = 0;
-    double playerBet = 0;
-    boolean dealerHas21 = false;
-    boolean keepGoing = true;
-    boolean playerDouble = false;
-    boolean playerBust = false;
-    boolean dealerKeepGoing = true;
-    boolean dealerBust = false;
-
-    public Game(){
-        this.game = game;
-    }
+    private double playerCardValue = 0;
+    private double dealerCardValue = 0;
+    private double dealerCardValueWithAce = 0;
+    private double playerBet = 0;
+    private boolean dealerHas21 = false;
+    private boolean keepGoing = true;
+    private boolean playerDouble = false;
+    private boolean playerBust = false;
+    private boolean dealerKeepGoing = true;
+    private boolean dealerBust = false;
 
     public void Run(){
-        System.out.println("1");
         playingDeck.createDeck();
-        System.out.println("1");
         playingDeck.shuffle();
-        System.out.println("1");
         while(playerMoney > 0) {
-            this.game.dealingCards();
-            this.game.showHand();
-            this.game.betting();
+            betting();
+            dealingCards();
+            showHand();
             dealerHas21 = checkHandforAce();
             while(!dealerHas21){
-                this.game.calls();
-                this.game.dealerMoves();
-                this.game.findWinner();
+               calls();
+               dealerMoves();
+               findWinner();
+               break;
             }
 
         }
@@ -56,7 +51,7 @@ public class Game {
             playerBet = userInput.nextDouble();
             if (playerBet > playerMoney) {
                 System.out.println("You don't have that kind of money pal");
-                bettingAmt = true;
+                bettingAmt = false;
             }
             else {
                 System.out.println("You bet $" + playerBet);
@@ -111,29 +106,36 @@ public class Game {
     }
 
     public void calls() {
+        int hitCount = 0;
+        keepGoing = true;
+        playerBust = false;
         while(keepGoing){ // This is the loop for the player if he hits/doubles/stays
             int move = 0;
+            System.out.println(move);
             System.out.println("Hit 1, Double 2, Stay 3");
             move = userInput.nextInt();
             if(move==2){
-                if(playerBet > playerMoney){
+                if((playerBet > playerMoney)||(hitCount>0)){
                     System.out.println("You cannot double here is a hit");
                     move = 1;
                 }
             }
             switch(move){
-                case 1: player.draw(playingDeck);
+                case 1:
+                    player.draw(playingDeck);
+                    hitCount++;
                     playerHand = player.toString();
                     System.out.println(playerHand);
                     playerCardValue = player.getCardValue();
                     System.out.println("Hand value: " + playerCardValue);
-                    if(playerCardValue>21){
+                    if(playerCardValue>21){ //Player busts
                         playerBust = true;
                         keepGoing = false;
-                        break;
                     }
+                    // if someone hits we have to make it so they can't double
                     break;
-                case 2: player.draw(playingDeck);
+                case 2:
+                    player.draw(playingDeck);
                     playerCardValue = player.getCardValue();
                     playerHand = player.toString();
                     System.out.println(playerHand);
@@ -146,7 +148,8 @@ public class Game {
                     }
                     keepGoing = false;
                     break;
-                case 3: keepGoing = false;
+                case 3:
+                    keepGoing = false;
                     break;
                 // Still need code for ace/soft cards
             }
@@ -155,6 +158,8 @@ public class Game {
     }
 
     public void dealerMoves() {
+        dealerKeepGoing = true;
+        dealerBust = false;
         while(dealerKeepGoing){
             if(playerCardValue>21){ // This is so that we don't go through this while loop
                 dealerKeepGoing = false;
@@ -181,23 +186,31 @@ public class Game {
         // After everyone has made there move we decide on a winner
         if((!dealerBust && dealerCardValue>playerCardValue)||playerBust){
             System.out.println("You lost...");
-            playerMoney-=playerBet;
+            dealerHand = dealer.toString();
+            System.out.println("Dealers cards: " + dealerHand);
         }
         else if(dealerCardValue == playerCardValue){
             System.out.println("Push...");
+            dealerHand = dealer.toString();
+            System.out.println("Dealers cards: " + dealerHand);
             playerMoney+=playerBet;
         }
         else{
             if(playerDouble){
-                System.out.println();
+                dealerHand = dealer.toString();
+                System.out.println("Dealers cards: " + dealerHand);
             }
             System.out.println("You won $ " + playerBet);
-            playerMoney+= playerBet;
+            dealerHand = dealer.toString();
+            System.out.println("Dealers cards: " + dealerHand);
+            playerMoney+= (2*playerBet);
         }
         // Reset the hands back to having no cards
         player.clearHand();
         dealer.clearHand();
     }
+
+    // Make a function for printing
 
 
 
