@@ -32,13 +32,6 @@ public class Deck {
         }
         return cardList;
     }
-    public String firstCard(){ //This gets me the dealers first card
-        int i=1;
-        String cardList = "";
-        Card aCard;
-        cardList += "\n" + i + "-" + this.cards.get(0).toString();
-        return cardList;
-    }
 
     public void shuffle(){
         ArrayList<Card> tempDeck = new ArrayList<Card>();
@@ -120,6 +113,30 @@ public class Deck {
         }
 
     }
+
+    public int getFirstCardVal(){
+        Card card;
+        Value value;
+        int cardVal = 0;
+        card = this.cards.get(0); // This grabs 1 card from the array list at that index
+        value = card.getValue(); // Since card has value and suit we need the value
+        return cardVal = value.getNumVal();
+    }
+
+    public String firstCard(){ //This gets me the dealers first card
+        int i=1;
+        String cardList = "";
+        Card aCard;
+        cardList += "\n" + i + "-" + this.cards.get(0).toString() + "\n2-[HIDDEN]";
+        return cardList;
+    }
+
+    public int deckSize(){
+        int size = 0;
+        return size = this.cards.size();
+    }
+
+
 
 
 

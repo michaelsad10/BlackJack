@@ -4,14 +4,17 @@ public class Game {
     private Deck playingDeck = new Deck();
     private Deck player = new Deck();
     private Deck dealer = new Deck();
+    private int deckSize = 0;
     private Scanner userInput = new Scanner(System.in);
-    private String playerHand, dealerHand;
+    private String playerHand, dealerHand,dealerHandHidden;
     char yn;
     private double playerMoney = 1000.00;
     private double insuranceBet = 0;
     private double playerCardValue = 0;
     private double dealerCardValue = 0;
+    private double playerCardValueWithAce = 0;
     private double dealerCardValueWithAce = 0;
+    private double dealerCardValueHidden = 0;
     private double playerBet = 0;
     private boolean dealerHas21 = false;
     private boolean keepGoing = true;
@@ -24,6 +27,11 @@ public class Game {
         playingDeck.createDeck();
         playingDeck.shuffle();
         while(playerMoney > 0) {
+             deckSize = playingDeck.deckSize();
+             if(deckSize <= 10){
+                 //We need to shuffle the deck
+                 playingDeck.clear
+             }
             betting();
             dealingCards();
             showHand();
@@ -65,14 +73,14 @@ public class Game {
 
     public void showHand() {
         playerHand = player.toString();
-        dealerHand = dealer.toString();
+        dealerHandHidden = dealer.firstCard();
         System.out.println("Your cards: " + playerHand);
-        System.out.println("Dealers cards: " + dealerHand);
+        System.out.println("Dealers cards: " + dealerHandHidden); // Hides the dealers second card
         System.out.println("---------------");
         playerCardValue = player.getCardValue();
         System.out.println("Hand value: " + playerCardValue);
-        dealerCardValue = dealer.getCardValue();
-        System.out.println("Dealer value: " + dealerCardValue);
+        dealerCardValueHidden = dealer.getFirstCardVal(); // Only shows the first card value so the second is hidden
+        System.out.println("Dealer value: " + dealerCardValueHidden);
     }
     //How to hide dealer second card.
     //How to hide dealer second card value.
@@ -111,7 +119,6 @@ public class Game {
         playerBust = false;
         while(keepGoing){ // This is the loop for the player if he hits/doubles/stays
             int move = 0;
-            System.out.println(move);
             System.out.println("Hit 1, Double 2, Stay 3");
             move = userInput.nextInt();
             if(move==2){
@@ -160,6 +167,9 @@ public class Game {
     public void dealerMoves() {
         dealerKeepGoing = true;
         dealerBust = false;
+        dealerCardValue = dealer.getCardValue();
+        System.out.println("Dealer value: " + dealerCardValue);
+
         while(dealerKeepGoing){
             if(playerCardValue>21){ // This is so that we don't go through this while loop
                 dealerKeepGoing = false;
@@ -186,29 +196,40 @@ public class Game {
         // After everyone has made there move we decide on a winner
         if((!dealerBust && dealerCardValue>playerCardValue)||playerBust){
             System.out.println("You lost...");
+            System.out.println("Your cards: " + playerHand);
+            System.out.println("Hand value: " + playerCardValue);
             dealerHand = dealer.toString();
             System.out.println("Dealers cards: " + dealerHand);
+            System.out.println("Dealer value: " + dealerCardValue);
         }
         else if(dealerCardValue == playerCardValue){
             System.out.println("Push...");
+            System.out.println("You lost...");
+            System.out.println("Your cards: " + playerHand);
+            System.out.println("Hand value: " + playerCardValue);
             dealerHand = dealer.toString();
             System.out.println("Dealers cards: " + dealerHand);
+            System.out.println("Dealer value: " + dealerCardValue);
             playerMoney+=playerBet;
         }
         else{
             if(playerDouble){
                 dealerHand = dealer.toString();
                 System.out.println("Dealers cards: " + dealerHand);
+                System.out.println("Dealer value: " + dealerCardValue);
             }
-            System.out.println("You won $ " + playerBet);
+            System.out.println("You won $" + playerBet);
             dealerHand = dealer.toString();
             System.out.println("Dealers cards: " + dealerHand);
+            System.out.println("Dealer value: " + dealerCardValue);
             playerMoney+= (2*playerBet);
         }
+
         // Reset the hands back to having no cards
         player.clearHand();
         dealer.clearHand();
     }
+
 
     // Make a function for printing
 
