@@ -60,15 +60,19 @@ public class Game {
             while(bettingAmt){
             System.out.println("You have $" + playerMoney + " how much would you like to bet?");
             playerBet = userInput.nextDouble();
-            if (playerBet > playerMoney) {
+            if (playerBet > playerMoney || playerBet < 0) {
                 System.out.println("You don't have that kind of money pal");
+                bettingAmt = true;
+            }
+            else if(playerBet < 0){
+                System.out.println("Hmmm you think you can bet negative money try a different casino pal");
                 bettingAmt = true;
             }
             else {
                 System.out.println("You bet $" + playerBet);
                 System.out.println("Good luck... dealing cards");
                 playerMoney-=playerBet;
-                break;
+                bettingAmt = false;
             }
 
         }
