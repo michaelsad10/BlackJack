@@ -30,7 +30,10 @@ public class Game {
              deckSize = playingDeck.deckSize();
              if(deckSize <= 10){
                  //We need to shuffle the deck
-                 playingDeck.clear
+                 System.out.println("Shuffling the cards...");
+                 playingDeck.clearHand();
+                 playingDeck.createDeck();
+                 playingDeck.shuffle();
              }
             betting();
             dealingCards();
