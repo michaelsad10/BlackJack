@@ -62,7 +62,7 @@ public class Game {
             playerBet = userInput.nextDouble();
             if (playerBet > playerMoney) {
                 System.out.println("You don't have that kind of money pal");
-                bettingAmt = false;
+                bettingAmt = true;
             }
             else {
                 System.out.println("You bet $" + playerBet);
